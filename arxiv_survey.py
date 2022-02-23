@@ -159,8 +159,13 @@ def make_pptx(query, survey):
             url_tf = url.text_frame
             url_para = url_tf.add_paragraph()    # 新增段落
             run = url_para.add_run()
-            run.text = survey[id]['arxiv']['pdf'].strip()
-            run.hyperlink.address = survey[id]['arxiv']['pdf']
+            if 'pdf' in survey[id]['arxiv'].keys(): 
+                run.text = survey[id]['arxiv']['pdf'].strip()
+                run.hyperlink.address = survey[id]['arxiv']['pdf']
+            else:
+                run.text = 'https://arxiv.org/'
+                run.hyperlink.address = 'https://arxiv.org/'
+
             font = url_para.font
             font.name = 'Calibri'    # 字体类型
             font.bold = False    # 加粗
@@ -202,7 +207,7 @@ def make_pptx(query, survey):
         except Exception as e:
             print(repr(e))
         
-    prs.save(f'F:\\Survey\\save\\ppt\\{query}_arxiv.pptx')
+    prs.save(f'.\\save\\ppt\\{query}_arxiv.pptx')
     
 
 def arxiv_survey(query, search_type='all', order='-announced_date_first', size=50, start=0):
@@ -289,6 +294,7 @@ def main():
         'visual language'
     ]
     search_type = 'title'
+
     for query in query_list:
         arxiv_survey(query, search_type=search_type)
 
